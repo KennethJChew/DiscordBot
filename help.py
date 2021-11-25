@@ -28,55 +28,16 @@ class myHelp(commands.HelpCommand):
         embed = discord.Embed(title="Help",description="Refer below for the full list of commands that the bot supports.\nType {prefix}help <command>for detailed explanations on each individual command.".format(prefix=self.clean_prefix))
         for cog,commands in mapping.items():
             
-            if cog:
-                print("Cog exists, getting cog commands...")
-                print("Cog:{0},Commands:{1}".format(cog.qualified_name,len(commands)))
-                cog_commands = cog.get_commands()
-                print("There are {0} commands.".format(len(commands)))
-                print("Commands are:")
-                command_count = 0
-                for command in cog_commands:
-                    command_count += 1
-                    print(str(command))
-                print("Filtering cog commands...")
-                filtered_commands = await self.filter_commands(commands,sort=True)
-                print("Filtered commands:")
-                print(filtered_commands)
-                command_count = 0
-            else:
-                print("There is no cog,filtering native bot commands...")
-                print("There are {0} native bot commands".format(len(commands)))
-                print("Commands are:")
-                command_count = 0
-                for command in commands:
-                    command_count += 1
-                    print(str(command) + command.name)
-                print("Filtering cog commands...")
-                filtered_commands = await self.filter_commands(commands,sort=True)
-                print("Filtered commands:")
-                print(filtered_commands)
-                command_count = 0
-
-            print("printing cog signatures")
+            filtered_commands = await self.filter_commands(commands,sort=True)
             command_signatures = [self.get_command_signature(c) for c in filtered_commands]
-            print(command_signatures)
 
             if command_signatures:
                 # Get the attribute named "qualified name" from the cog. If there is none, default is No Category
-                print("Command sig exists")
                 cog_name = getattr(cog,"qualified_name","Commands")
-                print("Cog name is " + cog_name)
                 embed.add_field(name=cog_name,value="\n".join(command_signatures),inline=False)
-                
-            else:
-                print("Command sig does not exist")
-                # raise errors.DiscordException("No command signatures found")
+
         output_channel = self.get_destination()
         await output_channel.send(embed=embed)
-
-
-
-
 
     #!help <command>
     """

@@ -20,7 +20,6 @@ class Greetings(commands.Cog):
         """
         
         """
-        print("On member join called")
         channel = member.guild.system_channel
         if channel is not None:
             await channel.send("Welcome {user.mention} to {server}.".format(user=member,server=member.guild))
@@ -38,18 +37,10 @@ class Greetings(commands.Cog):
         self._last_member = member
 
     async def cog_check(self, ctx):
-
-        print("COG CHECK")
         roles_list = ctx.author.roles
-        print("List length:" + str(len(roles_list)))
         for role in roles_list:
             if "admin" in role.name:
-                print("PASS")
-                print(role)
                 return True
-            else:
-                print("FALSE")
-                print(role)
         return False
 
 
